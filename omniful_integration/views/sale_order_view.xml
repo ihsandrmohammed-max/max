@@ -1,0 +1,79 @@
+<odoo>
+    <record id="view_sale_order_form_inherit_omniful" model="ir.ui.view">
+        <field name="name">sale.order.form.omniful</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Insert button after the "Cancel" button -->
+            <xpath expr="//button[@name='action_cancel']" position="after">
+                <field name="omniful_order_id" invisible="1"/>
+                <button name="action_send_to_omniful"
+                        type="object"
+                        string="Send to Omniful"
+                        class="btn-primary"
+                        invisible="omniful_order_id != False"/>
+                <button name="action_update_in_omniful"
+                        type="object"
+                        string="Update in Omniful"
+                        class="btn-secondary"
+                        invisible="omniful_order_id == False"/>
+                <button name="action_approve_in_omniful"
+                        type="object"
+                        string="Approve in Omniful"
+                        class="btn-success"
+                        invisible="omniful_order_id == False"/>
+
+                <button name="action_cancel_in_omniful"
+                        type="object"
+                        string="Cancel in Omniful"
+                        class="btn-danger"
+                        invisible="omniful_order_id == False"/>
+            </xpath>
+
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="omniful_order_id" readonly="1"/>
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Send to Omniful" groups="base.group_no_one">
+                    <group>
+                        <field name="omniful_send_json"
+                               nolabel="1"
+                               readonly="1"
+                               widget="text"
+                               style="font-family: monospace; white-space: pre;"/>
+                    </group>
+                </page>
+                <page string="Response from Omniful" groups="base.group_no_one">
+                    <group>
+                        <field name="omniful_response_json"
+                               nolabel="1"
+                               readonly="1"
+                               widget="text"
+                               style="font-family: monospace; white-space: pre;"/>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_sale_order_list_inherit_omniful" model="ir.ui.view">
+        <field name="name">sale.order.list.omniful</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+            <button name="action_send_to_omniful_rec"
+                        type="object"
+                        string="Send to Omniful"
+                        class="btn-primary"
+                        icon="fa-cloud-upload"/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="omniful_order_id" string="Omniful ID" readonly="1"  optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

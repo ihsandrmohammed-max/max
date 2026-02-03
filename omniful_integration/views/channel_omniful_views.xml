@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="channel_omniful_view_tree" model="ir.ui.view">
+        <field name="name">channel.omniful.list</field>
+        <field name="model">channel.omniful</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="base_url_omniful"/>
+                <field name="omniful_client_id"/>
+                <field name="inventory_feed_count"/>
+                <field name="active"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="channel_omniful_view_form" model="ir.ui.view">
+        <field name="name">channel.omniful.form</field>
+        <field name="model">channel.omniful</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_view_inventory_feeds" 
+                            type="object" 
+                            string="View Inventory Feeds" 
+                            class="btn-primary"
+                            icon="fa-list"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_inventory_feeds" 
+                                type="object" 
+                                class="oe_stat_button" 
+                                icon="fa-list">
+                            <field name="inventory_feed_count" widget="statinfo" string="Inventory Feeds"/>
+                        </button>
+                    </div>
+                    
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" invisible="active"/>
+                    
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Channel Name..."/>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <group name="basic_info" string="Basic Information">
+                            <field name="active"/>
+                            <field name="hub_code"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group name="api_config" string="API Configuration">
+                            <field name="base_url_omniful" placeholder="https://api.omniful.com"/>
+                            <field name="omniful_client_id" placeholder="Client ID"/>
+                        </group>
+                    </group>
+                    
+                    <group string="Authentication">
+                        <group name="tokens">
+                            <field name="omniful_access_token" password="True" placeholder="Access Token"/>
+                            <field name="omniful_refresh_token" password="True" placeholder="Refresh Token"/>
+                        </group>
+                        <group name="credentials">
+                            <field name="omniful_client_secret" password="True" placeholder="Client Secret"/>
+                            <field name="webhook_secret_key" password="True" placeholder="Webhook Secret Key"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="channel_omniful_view_search" model="ir.ui.view">
+        <field name="name">channel.omniful.search</field>
+        <field name="model">channel.omniful</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="omniful_client_id"/>
+                <field name="base_url_omniful"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Company" name="company" domain="[]" context="{'group_by': 'company_id'}"/>
+                    <filter string="Status" name="status" domain="[]" context="{'group_by': 'active'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="channel_omniful_action" model="ir.actions.act_window">
+        <field name="name">Omniful Channels</field>
+        <field name="res_model">channel.omniful</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Omniful Channel!
+            </p>
+            <p>
+                Configure your Omniful API channels to manage multi-channel inventory integration.
+            </p>
+        </field>
+    </record>
+
+
+</odoo>

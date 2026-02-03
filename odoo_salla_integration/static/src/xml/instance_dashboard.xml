@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<templates xml:space="preserve">
+	<t t-inherit="odoo_multi_channel_sale.instance_dashboard_template" t-inherit-mode="extension">
+        <xpath expr="//div[@id='dashboard_image_container']" position="inside">
+            <img src="/odoo_salla_integration/static/src/img/salla_dashboard.png" alt="Not Found!" class="img-fluid" t-if="data.channel === 'salla'"/>
+        </xpath>
+    </t>
+</templates>

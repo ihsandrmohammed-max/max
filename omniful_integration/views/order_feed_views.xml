@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Order Feed List View -->
+    <record id="order_feed_view_list" model="ir.ui.view">
+        <field name="name">order_omniful.feed.list</field>
+        <field name="model">order_omniful.feed</field>
+        <field name="arch" type="xml">
+            <list string="Order Feeds">
+                <field name="received_at"/>
+                <field name="event_name"/>
+                <field name="channel_id"/>
+                <field name="order_id"/>
+                <field name="order_number"/>
+                <field name="customer_name"/>
+                <field name="customer_email"/>
+                <field name="order_status"/>
+                <field name="order_total"/>
+                <field name="currency"/>
+                <field name="state" decoration-success="state == 'processed'" decoration-warning="state == 'received'" decoration-danger="state == 'error'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Order Feed Form View -->
+    <record id="order_feed_view_form" model="ir.ui.view">
+        <field name="name">order_omniful.feed.form</field>
+        <field name="model">order_omniful.feed</field>
+        <field name="arch" type="xml">
+            <form string="Order Feed">
+                <header>
+                    <button name="action_reprocess" type="object" string="Reprocess" class="btn-primary" invisible="state != 'error'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="received,processed,error"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Webhook Information">
+                            <field name="event_name"/>
+                            <field name="received_at"/>
+                            <field name="channel_id"/>
+                        </group>
+                        <group string="Order Information">
+                            <field name="order_id"/>
+                            <field name="order_number"/>
+                            <field name="order_status"/>
+                            <field name="order_total"/>
+                            <field name="currency"/>
+                            <field name="order_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Customer Information">
+                            <field name="customer_id"/>
+                            <field name="customer_name"/>
+                            <field name="customer_email"/>
+                        </group>
+                        <group string="Address Information">
+                            <field name="shipping_address"/>
+                            <field name="billing_address"/>
+                            <field name="payment_method"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Processing Information">
+                            <field name="error_message" invisible="state != 'error'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Raw Data">
+                            <field name="raw_data" widget="ace" options="{'mode': 'json', 'theme': 'monokai'}" style="min-height: 300px;"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Order Feed Search View -->
+    <record id="order_feed_view_search" model="ir.ui.view">
+        <field name="name">order_omniful.feed.search</field>
+        <field name="model">order_omniful.feed</field>
+        <field name="arch" type="xml">
+            <search string="Order Feeds">
+                <field name="order_number"/>
+                <field name="customer_name"/>
+                <field name="customer_email"/>
+                <field name="event_name"/>
+                <field name="channel_id"/>
+                <filter string="Received" name="received" domain="[('state', '=', 'received')]"/>
+                <filter string="Processed" name="processed" domain="[('state', '=', 'processed')]"/>
+                <filter string="Error" name="error" domain="[('state', '=', 'error')]"/>
+                <separator/>
+                <filter string="Today" name="today" domain="[('received_at', '>=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]"/>
+                <filter string="This Week" name="this_week" domain="[('received_at', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Event Name" name="group_event_name" context="{'group_by': 'event_name'}"/>
+                    <filter string="Channel" name="group_channel" context="{'group_by': 'channel_id'}"/>
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'received_at:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Order Feed Action -->
+    <record id="order_feed_action" model="ir.actions.act_window">
+        <field name="name">Order Feeds</field>
+        <field name="res_model">order_omniful.feed</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="order_feed_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No order feeds found!
+            </p>
+            <p>
+                Order feeds will appear here when webhooks are received from Omniful.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+</odoo>

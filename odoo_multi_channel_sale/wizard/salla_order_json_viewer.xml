@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_salla_order_json_viewer_form" model="ir.ui.view">
+        <field name="name">salla.order.json.viewer.form</field>
+        <field name="model">salla.order.json.viewer</field>
+        <field name="arch" type="xml">
+            <form string="Salla Order JSON Response">
+                <header>
+                    <button string="Close" class="btn-primary" special="cancel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="order_id"/>
+                            <field name="order_name"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="JSON Data">
+                            <field name="json_data" widget="json_tree_viewer" nolabel="1" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_salla_order_json_viewer" model="ir.actions.act_window">
+        <field name="name">Salla Order JSON Response</field>
+        <field name="res_model">salla.order.json.viewer</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_salla_order_json_viewer_form"/>
+    </record>
+</odoo>

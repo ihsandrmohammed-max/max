@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Purchase Feed List View -->
+    <record id="purchase_feed_view_list" model="ir.ui.view">
+        <field name="name">purchase.feed.list</field>
+        <field name="model">purchase.feed</field>
+        <field name="arch" type="xml">
+            <list string="Purchase Feeds">
+                <field name="received_at"/>
+                <field name="event_name"/>
+                <field name="channel_id"/>
+                <field name="purchase_id"/>
+                <field name="purchase_number"/>
+                <field name="supplier_name"/>
+                <field name="supplier_email"/>
+                <field name="purchase_status"/>
+                <field name="total_amount"/>
+                <field name="currency"/>
+                <field name="state" decoration-success="state == 'processed'" decoration-warning="state == 'received'" decoration-danger="state == 'error'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Purchase Feed Form View -->
+    <record id="purchase_feed_view_form" model="ir.ui.view">
+        <field name="name">purchase.feed.form</field>
+        <field name="model">purchase.feed</field>
+        <field name="arch" type="xml">
+            <form string="Purchase Feed">
+                <header>
+                    <button name="action_reprocess" type="object" string="Reprocess" class="btn-primary" invisible="state != 'error'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="received,processed,error"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Webhook Information">
+                            <field name="event_name"/>
+                            <field name="received_at"/>
+                            <field name="channel_id"/>
+                        </group>
+                        <group string="Purchase Order Information">
+                            <field name="purchase_id"/>
+                            <field name="purchase_number"/>
+                            <field name="purchase_status"/>
+                            <field name="total_amount"/>
+                            <field name="currency"/>
+                            <field name="order_date"/>
+                            <field name="expected_delivery_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Supplier Information">
+                            <field name="supplier_id"/>
+                            <field name="supplier_name"/>
+                            <field name="supplier_email"/>
+                        </group>
+                        <group string="Delivery Information">
+                            <field name="delivery_address"/>
+                            <field name="payment_terms"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Processing Information">
+                            <field name="error_message" invisible="state != 'error'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Raw Data">
+                            <field name="raw_data" widget="ace" options="{'mode': 'json'}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Purchase Feed Search View -->
+    <record id="purchase_feed_view_search" model="ir.ui.view">
+        <field name="name">purchase.feed.search</field>
+        <field name="model">purchase.feed</field>
+        <field name="arch" type="xml">
+            <search string="Purchase Feeds">
+                <field name="purchase_number"/>
+                <field name="supplier_name"/>
+                <field name="supplier_email"/>
+                <field name="event_name"/>
+                <field name="channel_id"/>
+                <filter string="Received" name="received" domain="[('state', '=', 'received')]"/>
+                <filter string="Processed" name="processed" domain="[('state', '=', 'processed')]"/>
+                <filter string="Error" name="error" domain="[('state', '=', 'error')]"/>
+                <separator/>
+                <filter string="Today" name="today" domain="[('received_at', '>=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]"/>
+                <filter string="This Week" name="this_week" domain="[('received_at', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Event Name" name="group_event_name" context="{'group_by': 'event_name'}"/>
+                    <filter string="Channel" name="group_channel" context="{'group_by': 'channel_id'}"/>
+                    <filter string="Supplier" name="group_supplier" context="{'group_by': 'supplier_name'}"/>
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'received_at:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Purchase Feed Action -->
+    <record id="purchase_feed_action" model="ir.actions.act_window">
+        <field name="name">Purchase Feeds</field>
+        <field name="res_model">purchase.feed</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="purchase_feed_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No purchase feeds found!
+            </p>
+            <p>
+                Purchase feeds will appear here when webhooks are received from Omniful.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+</odoo>

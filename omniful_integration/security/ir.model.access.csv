@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_temp_inventory,access_temp_inventory,model_temp_inventory,base.group_user,1,1,1,1
+access_channel_omniful,access_channel_omniful,model_channel_omniful,base.group_user,1,1,1,1
+access_inventory_feed,access_inventory_feed,model_inventory_feed,base.group_user,1,1,1,1
+access_inventory_feed_line,access_inventory_feed_line,model_inventory_feed_line,base.group_user,1,1,1,1
+access_order_omniful_feed,access_order_omniful_feed,model_order_omniful_feed,base.group_user,1,1,1,1
+access_product_omniful_feed,access_product_omniful_feed,model_product_omniful_feed,base.group_user,1,1,1,1
+access_purchase_feed,access_purchase_feed,model_purchase_feed,base.group_user,1,1,1,1
+access_shipment_feed,access_shipment_feed,model_shipment_feed,base.group_user,1,1,1,1
+access_stock_feed,access_stock_feed,model_stock_feed,base.group_user,1,1,1,1
+access_temp_inventory_user,temp.inventory.user,model_temp_inventory,base.group_user,1,1,1,1
+access_temp_inventory_manager,temp.inventory.manager,model_temp_inventory,base.group_system,1,1,1,1

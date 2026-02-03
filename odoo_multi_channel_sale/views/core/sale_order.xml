@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+	<data>
+		<record id="view_order_form" model="ir.ui.view">
+			<field name="name">odoo.multi.channel.sale.order</field>
+			<field name="model">sale.order</field>
+			<field name="inherit_id" ref="sale.view_order_form"/>
+			<!-- <field name="groups_id" eval="[(4,ref('odoo_multi_channel_sale.group_multi_channel_user'))]"/> -->
+			<field name="arch" type="xml">
+				<xpath expr="//notebook" position="inside">
+					<page name="channel" string="Channel">
+						<separator name="mapping" string="Mappings"/>
+						<field name="channel_mapping_ids" readonly="1"/>
+					</page>
+				</xpath>
+			</field>
+		</record>
+<!--        For list view add total_amount after amount_total filed-->
+        <record id="view_order_list" model="ir.ui.view">
+            <field name="name">odoo.multi.channel.sale.order.list</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_total']" position="after">
+                    <field name="total_amount" optional="show"/>
+                    <field name="total_mismatch" widget="bool_toggle" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_sale_order_filter_mismatch" model="ir.ui.view">
+            <field name="name">sale.order.filter.total_mismatch</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search" position="inside">
+                    <filter string="Total Mismatch" name="total_mismatch_filter" domain="[('total_mismatch','=',True)]"/>
+                </xpath>
+            </field>
+        </record>
+
+
+	</data>
+</odoo>

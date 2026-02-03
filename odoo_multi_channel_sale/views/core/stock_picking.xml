@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_picking_form_inherit_salla" model="ir.ui.view">
+            <field name="name">stock.picking.form.salla</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <!-- Add button in the header -->
+                <header position="inside">
+                    <field name="state" invisible="1"/>
+                    <field name="picking_type_code" invisible="1"/>
+                    <button name="btn_update_in_salla"
+                            type="object"
+                            string="Update in Salla"
+                            class="btn-primary"
+                            invisible="state != 'done' or picking_type_code != 'outgoing'"/>
+                </header>
+                <xpath expr="//field[@name='origin']" position="after">
+                    <field name="salla_order_status_id" widget="selection" options="{'no_create': True, 'no_create_edit': True}"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

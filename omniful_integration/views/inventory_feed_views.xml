@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="inventory_feed_view_tree" model="ir.ui.view">
+        <field name="name">inventory.feed.list</field>
+        <field name="model">inventory.feed</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'processed'" decoration-danger="state == 'error'" decoration-info="state == 'received'">
+                <field name="event_name"/>
+                <field name="channel_id"/>
+                <field name="total_lines"/>
+                <field name="total_quantity"/>
+                <field name="received_at"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="inventory_feed_view_form" model="ir.ui.view">
+        <field name="name">inventory.feed.form</field>
+        <field name="model">inventory.feed</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_reprocess" 
+                            type="object" 
+                            string="Reprocess" 
+                            class="btn-primary"
+                            invisible="state != 'error'"
+                            icon="fa-refresh"/>
+                    <field name="state" widget="statusbar" statusbar_visible="received,processed,error"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="display_name"/>
+                        </h1>
+                    </div>
+                    
+                    <group>
+                        <field name="event_name"/>
+                        <field name="channel_id"/>
+                        <field name="received_at"/>
+                        <field name="total_lines"/>
+                        <field name="total_quantity"/>
+                        <field name="state"/>
+                        <field name="error_message" invisible="state != 'error'"/>
+                    </group>
+                    
+                    <group string="Processing" invisible="state != 'error'">
+                        <field name="error_message" widget="text"/>
+                    </group>
+                    
+                    
+                    <notebook>
+                        <page string="Inventory Lines" name="inventory_lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sku_code"/>
+                                    <field name="hub_code"/>
+                                    <field name="seller_code"/>
+                                    <field name="quantity"/>
+                                    <field name="quantity_on_hand"/>
+                                    <field name="quantity_reserved"/>
+                                    <field name="unlimited_quantity"/>
+                                    <field name="uom"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Raw Data" name="raw_data">
+                            <field name="raw_data" nolabel="1" widget="ace" options="{'mode': 'json'}"/>
+                        </page>
+
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="inventory_feed_view_search" model="ir.ui.view">
+        <field name="name">inventory.feed.search</field>
+        <field name="model">inventory.feed</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="event_name"/>
+                <field name="channel_id"/>
+                <field name="state"/>
+                <filter string="Received" name="received" domain="[('state', '=', 'received')]"/>
+                <filter string="Processed" name="processed" domain="[('state', '=', 'processed')]"/>
+                <filter string="Error" name="error" domain="[('state', '=', 'error')]"/>
+                <separator/>
+                <filter string="Today" name="today" domain="[('received_at', '>=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]"/>
+                <filter string="This Week" name="this_week" domain="[('received_at', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Channel" name="channel" domain="[]" context="{'group_by': 'channel_id'}"/>
+                    <filter string="Event" name="event" domain="[]" context="{'group_by': 'event_name'}"/>
+                    <filter string="Status" name="status" domain="[]" context="{'group_by': 'state'}"/>
+                    <filter string="Date" name="date" domain="[]" context="{'group_by': 'received_at:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="inventory_feed_action" model="ir.actions.act_window">
+        <field name="name">Inventory Feeds</field>
+        <field name="res_model">inventory.feed</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No inventory feeds received yet!
+            </p>
+            <p>
+                Inventory feeds will appear here when webhooks are received from Omniful.
+            </p>
+        </field>
+    </record>
+
+
+</odoo>

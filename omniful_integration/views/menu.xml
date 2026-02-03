@@ -1,0 +1,51 @@
+
+<odoo>
+
+<menuitem id="menu_omniful_root" name="Omniful" sequence="100">
+
+    <menuitem id="menu_channel_omniful"
+              name="Channels"
+              action="channel_omniful_action"
+              sequence="10"/>
+
+    <menuitem id="menu_temp_inventory"
+              name="Temporary Inventory"
+              action="action_temp_inventory"
+              sequence="20"/>
+
+    <menuitem id="menu_inventory_feed"
+              name="Inventory Feeds"
+              action="inventory_feed_action"
+              sequence="30"/>
+
+    <menuitem id="menu_order_feed"
+              name="Order Feeds"
+              action="order_feed_action"
+              sequence="40"/>
+
+    <menuitem id="menu_product_omniful_feed"
+              name="Product Feeds"
+              action="product_omniful_feed_action"
+              sequence="50"/>
+
+    <menuitem id="menu_shipment_feed"
+              name="Shipment Feeds"
+              action="shipment_feed_action"
+              sequence="60"/>
+
+    <menuitem id="menu_stock_feed"
+              name="Stock Feeds"
+              action="stock_feed_action"
+              sequence="70"/>
+        <menuitem id="menu_purchase_feed"
+                  name="Purchase Feeds"
+                  action="purchase_feed_action"
+                  sequence="40"/>
+
+
+</menuitem>
+
+
+
+
+</odoo>

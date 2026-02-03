@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="odoo_multi_channel_sale.JsonTreeViewer">
+        <div class="json-tree-viewer-container o_field_json_tree_viewer_container">
+            <t t-if="state.error">
+                <div class="alert alert-danger" role="alert">
+                    <t t-esc="state.error"/>
+                </div>
+            </t>
+            <t t-elif="state.parsedData === null">
+                <div class="text-muted">No JSON data available</div>
+            </t>
+            <t t-else="">
+                <div class="json-tree-viewer">
+                    <JsonTreeNode 
+                        data="state.parsedData" 
+                        path="'root'" 
+                        level="0"
+                        expanded="state.expanded"
+                        onToggle="(path) => this.togglePath(path)"/>
+                </div>
+            </t>
+        </div>
+    </t>
+
+    <t t-name="odoo_multi_channel_sale.JsonTreeNode">
+        <div class="json-node" t-att-style="'padding-left: ' + (props.level * 20) + 'px;'">
+            <t t-if="isExpandable()">
+                <span class="json-toggle" t-on-click="onToggleClick">
+                    <i t-attf-class="fa #{isExpanded() ? 'fa-caret-down' : 'fa-caret-right'}"/>
+                </span>
+                <span class="json-key" t-esc="getKeyDisplay()"/>
+                <span class="json-type" t-esc="getValueType() === 'array' ? 'Array' : 'Object'"/>
+                <span class="json-count">(<t t-esc="getItemCount()"/>)</span>
+            </t>
+            <t t-else="">
+                <span class="json-key" t-esc="getKeyDisplay()"/>
+                <span class="json-separator">:</span>
+                <span t-attf-class="json-value json-value-#{getValueType()}" t-esc="formatValue()"/>
+            </t>
+        </div>
+
+        <t t-if="isExpandable() and isExpanded()">
+            <t t-foreach="getChildren()" t-as="child" t-key="child.path">
+                <JsonTreeNode 
+                    data="child.value" 
+                    path="child.path" 
+                    level="props.level + 1"
+                    expanded="props.expanded"
+                    onToggle="props.onToggle"/>
+            </t>
+        </t>
+    </t>
+</templates>

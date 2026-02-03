@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <!-- Inherit multi channel sale form view to add make_payment field -->
+        <record id="multi_channel_view_form_payment" model="ir.ui.view">
+            <field name="name">multi.channel.sale.form.payment</field>
+            <field name="model">multi.channel.sale</field>
+            <field name="inherit_id" ref="odoo_multi_channel_sale.multi_channel_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='odoo_ship_order']" position="after">
+                    <field name="make_payment" string="C.PAY"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+

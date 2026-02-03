@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Stock Feed List View -->
+    <record id="stock_feed_view_list" model="ir.ui.view">
+        <field name="name">stock.feed.list</field>
+        <field name="model">stock.feed</field>
+        <field name="arch" type="xml">
+            <list string="Stock Feeds">
+                <field name="received_at"/>
+                <field name="event_name"/>
+                <field name="channel_id"/>
+                <field name="product_sku"/>
+                <field name="location_code"/>
+                <field name="warehouse_code"/>
+                <field name="available_quantity"/>
+                <field name="reserved_quantity"/>
+                <field name="total_quantity"/>
+                <field name="movement_type"/>
+                <field name="state" decoration-success="state == 'processed'" decoration-warning="state == 'pending'" decoration-danger="state == 'error'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Stock Feed Form View -->
+    <record id="stock_feed_view_form" model="ir.ui.view">
+        <field name="name">stock.feed.form</field>
+        <field name="model">stock.feed</field>
+        <field name="arch" type="xml">
+            <form string="Stock Feed">
+                <header>
+                    <button name="action_reprocess" type="object" string="Reprocess" class="btn-primary" invisible="state != 'error'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,processed,error"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Webhook Information">
+                            <field name="event_name"/>
+                            <field name="received_at"/>
+                            <field name="channel_id"/>
+                        </group>
+                        <group string="Product Information">
+                            <field name="product_sku"/>
+                            <field name="product_name"/>
+                            <field name="product_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Location Information">
+                            <field name="location_code"/>
+                            <field name="warehouse_code"/>
+                            <field name="zone_code"/>
+                        </group>
+                        <group string="Stock Information">
+                            <field name="available_quantity"/>
+                            <field name="reserved_quantity"/>
+                            <field name="total_quantity"/>
+                            <field name="movement_type"/>
+                            <field name="movement_reference"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Movement Details">
+                            <field name="movement_date"/>
+                            <field name="movement_reason"/>
+                        </group>
+                        <group string="Processing Information">
+                            <field name="error_message" invisible="state != 'error'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Raw Data">
+                            <field name="raw_data" widget="ace" options="{'mode': 'json'}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Stock Feed Search View -->
+    <record id="stock_feed_view_search" model="ir.ui.view">
+        <field name="name">stock.feed.search</field>
+        <field name="model">stock.feed</field>
+        <field name="arch" type="xml">
+            <search string="Stock Feeds">
+                <field name="product_sku"/>
+                <field name="product_name"/>
+                <field name="location_code"/>
+                <field name="warehouse_code"/>
+                <field name="movement_type"/>
+                <field name="event_name"/>
+                <field name="channel_id"/>
+                <filter string="Pending" name="pending" domain="[('state', '=', 'pending')]"/>
+                <filter string="Processed" name="processed" domain="[('state', '=', 'processed')]"/>
+                <filter string="Error" name="error" domain="[('state', '=', 'error')]"/>
+                <separator/>
+                <filter string="Today" name="today" domain="[('received_at', '>=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]"/>
+                <filter string="This Week" name="this_week" domain="[('received_at', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Event Name" name="group_event_name" context="{'group_by': 'event_name'}"/>
+                    <filter string="Channel" name="group_channel" context="{'group_by': 'channel_id'}"/>
+                    <filter string="Product" name="group_product" context="{'group_by': 'product_sku'}"/>
+                    <filter string="Location" name="group_location" context="{'group_by': 'location_code'}"/>
+                    <filter string="Warehouse" name="group_warehouse" context="{'group_by': 'warehouse_code'}"/>
+                    <filter string="Movement Type" name="group_movement_type" context="{'group_by': 'movement_type'}"/>
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'received_at:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Stock Feed Action -->
+    <record id="stock_feed_action" model="ir.actions.act_window">
+        <field name="name">Stock Feeds</field>
+        <field name="res_model">stock.feed</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="stock_feed_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No stock feeds found!
+            </p>
+            <p>
+                Stock feeds will appear here when webhooks are received from Omniful.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item -->
+</odoo>

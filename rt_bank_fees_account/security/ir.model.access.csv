@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rt_bank_fees_account_rt_bank_fees_account,rt_bank_fees_account.rt_bank_fees_account,model_rt_bank_fees_account_rt_bank_fees_account,base.group_user,1,1,1,1

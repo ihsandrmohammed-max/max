@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo noupdate="1">
+    <record id="channel_default_pricelist_id" model="product.pricelist">
+        <field name="name">Channel Pricelist</field>
+        <field name="active">False</field>
+    </record>
+</odoo>

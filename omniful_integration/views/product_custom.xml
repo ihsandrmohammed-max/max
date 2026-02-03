@@ -1,0 +1,64 @@
+<odoo>
+    <record id="view_product_form_inherit_omniful" model="ir.ui.view">
+        <field name="name">product.template.form.omniful</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="send_to_omniful" type="object" string="Send to Omniful" class="btn-primary"/>
+                <button name="check_in_omniful" type="object" string="Check in Omniful" class="btn-secondary"/>
+                <button name="update_in_omniful" type="object" string="Update in Omniful" class="btn-secondary"/>
+            </header>
+
+             <xpath expr="//notebook" position="inside">
+                <page string="Omniful Info">
+                    <group>
+                        <group>
+                            <field name="omniful_status" readonly="1"/>
+                            <field name="omniful_price" readonly="1"/>
+                            <field name="omniful_currency" readonly="1"/>
+                            <field name="omniful_country" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="omniful_response_json" nolabel="1" readonly="1" widget="text"
+                               placeholder="Raw response from Omniful will appear here"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+<!--    For list-->
+    <record id="view_product_list_inherit_omniful" model="ir.ui.view">
+        <field name="name">product.template.list.omniful</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+            <button name="action_send_to_omniful"
+                        type="object"
+                        string="Send to Omniful"
+                        class="btn-primary"
+                        icon="fa-cloud-upload"/>
+            </xpath>
+            <xpath expr="//list" position="inside">
+            <button name="action_send_to_omniful"
+                        type="object"
+                        string="Send to Omniful"
+                        class="btn-primary"
+                        icon="fa-cloud-upload"/>
+            </xpath>
+
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="omniful_status" readonly="1"/>
+            </xpath>
+
+
+        </field>
+    </record>
+
+
+
+
+</odoo>

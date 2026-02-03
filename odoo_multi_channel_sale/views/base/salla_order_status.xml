@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+        <!-- List View -->
+        <record id="view_salla_order_status_tree" model="ir.ui.view">
+            <field name="name">salla.order.status.list</field>
+            <field name="model">salla.order.status</field>
+            <field name="arch" type="xml">
+                <list string="Salla Order Statuses">
+                    <field name="name"/>
+                    <field name="slug"/>
+                    <field name="type"/>
+                    <field name="is_active" widget="boolean_toggle"/>
+                    <field name="parent_id"/>
+                    <field name="sort"/>
+                    <field name="salla_status_id" optional="hide"/>
+                    <field name="channel_id" optional="hide"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_salla_order_status_form" model="ir.ui.view">
+            <field name="name">salla.order.status.form</field>
+            <field name="model">salla.order.status</field>
+            <field name="arch" type="xml">
+                <form string="Salla Order Status">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="slug"/>
+                                <field name="type"/>
+                                <field name="sort"/>
+                                <field name="is_active"/>
+                            </group>
+                            <group>
+                                <field name="salla_status_id"/>
+                                <field name="channel_id"/>
+                                <field name="parent_id" options="{'no_create': True, 'no_create_edit': True}"/>
+                            </group>
+                        </group>
+                        <group string="Original Status">
+                            <field name="original_id"/>
+                            <field name="original_name"/>
+                        </group>
+                        <group string="Additional Information">
+                            <field name="icon"/>
+                            <field name="message" widget="text"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_salla_order_status_search" model="ir.ui.view">
+            <field name="name">salla.order.status.search</field>
+            <field name="model">salla.order.status</field>
+            <field name="arch" type="xml">
+                <search string="Search Salla Order Status">
+                    <field name="name"/>
+                    <field name="slug"/>
+                    <field name="type"/>
+                    <field name="salla_status_id"/>
+                    <filter string="Active" name="filter_active" domain="[('is_active', '=', True)]"/>
+                    <filter string="Inactive" name="filter_inactive" domain="[('is_active', '=', False)]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Type" name="group_by_type" context="{'group_by': 'type'}"/>
+                        <filter string="Channel" name="group_by_channel" context="{'group_by': 'channel_id'}"/>
+                        <filter string="Parent Status" name="group_by_parent" context="{'group_by': 'parent_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_salla_order_status" model="ir.actions.act_window">
+            <field name="name">Salla Order Statuses</field>
+            <field name="res_model">salla.order.status</field>
+            <field name="view_mode">list,form</field>
+            <field name="view_id" ref="view_salla_order_status_tree"/>
+            <field name="search_view_id" ref="view_salla_order_status_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No order statuses synchronized yet
+                </p>
+                <p>
+                    Click the "Sync Order Statuses" button in the channel configuration form to synchronize statuses from Salla.
+                </p>
+            </field>
+        </record>
+
+        <!-- Inherit multi_channel_view_form to add sync button -->
+        <record id="view_multi_channel_sale_form_inherit_salla_status" model="ir.ui.view">
+            <field name="name">multi.channel.sale.form.inherit.salla.status</field>
+            <field name="model">multi.channel.sale</field>
+            <field name="inherit_id" ref="odoo_multi_channel_sale.multi_channel_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='open_record_view']" position="after">
+                    <button
+                        name="sync_salla_order_statuses"
+                        string="Sync Order Statuses"
+                        title="Synchronize order statuses from Salla"
+                        type="object"
+                        class="btn-secondary"
+                        groups="odoo_multi_channel_sale.group_multi_channel_admin"
+                        icon="fa-refresh"
+                    />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

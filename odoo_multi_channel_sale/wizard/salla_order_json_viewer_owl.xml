@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Example: Using JSON Tree Viewer as a field widget -->
+    <record id="view_salla_order_json_viewer_form_owl" model="ir.ui.view">
+        <field name="name">salla.order.json.viewer.form.owl</field>
+        <field name="model">salla.order.json.viewer</field>
+        <field name="arch" type="xml">
+            <form string="Salla Order JSON Response (OWL Component)">
+                <header>
+                    <button string="Close" class="btn-primary" special="cancel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="order_id"/>
+                            <field name="order_name"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="JSON Data">
+                            <!-- Method 1: Using widget attribute with JSON string field -->
+                            <field name="json_data" widget="json_tree_viewer" nolabel="1" readonly="1"/>
+                            
+                            <!-- Method 2: Using widget with data from context -->
+                            <!-- 
+                            <div class="oe_read_only">
+                                <label for="json_viewer_custom"/>
+                                <div>
+                                    <field name="json_data" widget="json_tree_viewer" invisible="1"/>
+                                    <JsonTreeViewer jsonString="json_data"/>
+                                </div>
+                            </div>
+                            -->
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

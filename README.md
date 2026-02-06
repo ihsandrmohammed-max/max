@@ -21,4 +21,7 @@ Revert project to the state of October 27
 Hello  Dr. Mohammed 
 Optimize project dashboard queries
 
+Add access rules validation for environment actions
+
+
                 

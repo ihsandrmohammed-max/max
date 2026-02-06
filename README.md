@@ -22,6 +22,7 @@ Hello  Dr. Mohammed
 Optimize project dashboard queries
 
 Add access rules validation for environment actions
+Add automatic staging rebuild on successful merge
 
 
                 

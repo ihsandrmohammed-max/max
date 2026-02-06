@@ -25,4 +25,5 @@ Add access rules validation for environment actions
 Add automatic staging rebuild on successful merge
 
 
-                
+Fix traceback when creating branch without source
+

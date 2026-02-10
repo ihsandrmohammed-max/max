@@ -8,11 +8,11 @@ from odoo import fields, models
 class ProductCategory(models.Model):
     _inherit = "product.category"
 
-    # allow_negative_stock = fields.Boolean(
-    #     help="Allow negative stock levels for the stockable products "
-    #     "attached to this category. The options doesn't apply to products "
-    #     "attached to sub-categories of this category.",
-    # )
+    allow_negative_stock = fields.Boolean(
+        help="Allow negative stock levels for the stockable products "
+        "attached to this category. The options doesn't apply to products "
+        "attached to sub-categories of this category.",
+    )
 
 
 class ProductTemplate(models.Model):
